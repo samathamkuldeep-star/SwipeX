@@ -1,0 +1,25 @@
+# Python / Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local Environment & Data Stores
+.env
+data/
+*.chroma
+*.db
+*.sqlite3
+
+# OS metadata
+.DS_Store
+Thumbs.db

@@ -1,0 +1,18 @@
+# Python / Virtual Environment
+.venv/
+venv/
+
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+
+# Environment & Local Data
+.env
+data/
+
+# OS metadata
+.DS_Store
+Thumbs.db
