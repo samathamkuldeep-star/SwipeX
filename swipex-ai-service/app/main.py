@@ -47,12 +47,21 @@ async def lifespan(app: FastAPI):
 
 
 
+import json
+from pathlib import Path
+
+OPENAPI_SPEC_PATH = Path(__file__).resolve().parent / "data" / "openapi_career_intelligence.json"
+
+
 def create_application() -> FastAPI:
     """FastAPI application factory."""
     app = FastAPI(
-        title="SwipeX AI/NLP Service",
+        title="SwipeX Career Intelligence API",
         description="AI/ML Career Intelligence, Resume Extraction, ATS Scoring & Semantic Recommendations",
         version="1.0.0",
+        openapi_url="/api/v1/openapi.json",
+        docs_url="/docs",
+        redoc_url="/redoc",
         lifespan=lifespan,
     )
 
@@ -67,6 +76,16 @@ def create_application() -> FastAPI:
 
     # Versioned API routes under /api/v1
     app.include_router(api_router, prefix="/api/v1")
+
+    # Custom OpenAPI schema to display only the requested Career Intelligence endpoints in Swagger UI
+    if OPENAPI_SPEC_PATH.exists():
+        with open(OPENAPI_SPEC_PATH, "r", encoding="utf-8") as f:
+            custom_openapi = json.load(f)
+
+        def get_custom_openapi():
+            return custom_openapi
+
+        app.openapi = get_custom_openapi
 
     return app
 
