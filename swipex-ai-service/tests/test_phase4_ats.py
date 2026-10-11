@@ -252,12 +252,16 @@ class TestATSScorerBlended:
 
 
 @pytest.fixture()
-def ats_client():
+def ats_client(monkeypatch):
     from fastapi.testclient import TestClient
 
+    from app.core.config import settings
     from app.main import create_application
     from app.services.ai.embeddings import set_embedding_service
     from app.services.ai.vector_store import VectorStore, set_vector_store
+
+    # Ensure auth is enforced even in dev mode
+    monkeypatch.setattr(settings, "INTERNAL_API_KEY", "test-secret")
 
     # minimal degraded store so /ready doesn't 503
     store = VectorStore()

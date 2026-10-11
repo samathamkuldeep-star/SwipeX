@@ -319,13 +319,17 @@ async def test_vector_store_unavailable_error_on_degraded_upsert():
 
 
 @pytest.fixture()
-def index_client(patched_vector_store):
+def index_client(patched_vector_store, monkeypatch):
     """Test client with FakeEmbeddingService + patched VectorStore injected."""
     from fastapi.testclient import TestClient
 
+    from app.core.config import settings
     from app.main import create_application
     from app.services.ai.embeddings import set_embedding_service
     from app.services.ai.vector_store import set_vector_store
+
+    # Ensure auth is enforced even in dev mode
+    monkeypatch.setattr(settings, "INTERNAL_API_KEY", "test-secret")
 
     test_app = create_application()
     set_embedding_service(FakeEmbeddingService())
