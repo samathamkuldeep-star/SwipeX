@@ -74,8 +74,21 @@ def create_application() -> FastAPI:
     # Top-level health/ready routes
     app.include_router(health.router, tags=["Health"])
 
+    # Career Intelligence Endpoints
+    from app.api.v1.endpoints.compat import router as compat_router
+    app.include_router(compat_router, prefix="/api/v1")
+
     # Versioned API routes under /api/v1
     app.include_router(api_router, prefix="/api/v1")
+
+    @app.get("/", tags=["System"])
+    def root():
+        return {
+            "message": "Welcome to SwipeX AI/ML Career Intelligence Service",
+            "docs": "/docs",
+            "health": "/health",
+            "api_v1": "/api/v1",
+        }
 
     # Custom OpenAPI schema to display only the requested Career Intelligence endpoints in Swagger UI
     if OPENAPI_SPEC_PATH.exists():
